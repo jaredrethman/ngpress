@@ -1,0 +1,14 @@
+$primaryColor: #666;
+
+$assetsDir : '../../assets';
+$imageDir : '#{$assetsDir}/images';
+
+html{
+  color: $primaryColor;
+}
+#custom_id{
+  background-color: $primaryColor;
+  color: #454545;
+  transform: rotate('180deg');
+  background-image: url(#{$imageDir}/img.png);
+}

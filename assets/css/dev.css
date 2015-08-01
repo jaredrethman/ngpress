@@ -1,0 +1,10 @@
+html {
+  color: #666;
+}
+
+#custom_id {
+  background-color: #666;
+  color: #454545;
+  transform: rotate("180deg");
+  background-image: url(../images/img.png);
+}

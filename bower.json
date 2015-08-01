@@ -1,0 +1,29 @@
+{
+  "name": "trmdigital.com",
+  "version": "1.0.1",
+  "authors": [
+    "Jared Rethman - jared@trmmultimedia.com"
+  ],
+  "description": "TRM Digital Wordpress AngularJS theme",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "keywords": [
+    "AngularJS",
+    "Wordpress"
+  ],
+  "license": "MIT",
+  "homepage": "http://trmdigital.com",
+  "dependencies": {
+    "bootstrap-sass": "~ 3.3.5",
+    "angular": "~ 1.4.1",
+    "angular-animate": "~ 1.4.1",
+    "angular-ui-router": "~ 0.2.15"
+  },
+  "devDependencies": {
+    "ui-router-extras": "~0.0.14",
+    "angular-resource": "~1.4.2"
+  }
+}

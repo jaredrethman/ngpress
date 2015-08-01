@@ -61,6 +61,5 @@ ngPressApp.config( ['$stateProvider', '$futureStateProvider', '$urlRouterProvide
 ngPressApp.run( ['apiFactory',
     function( apiFactory ) {
         //console.log(apiFactory.Root.get());
-
     }
 ]);

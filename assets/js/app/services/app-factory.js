@@ -3,8 +3,6 @@ ngPressApp.factory('apiFactory', ['$resource', 'WP_Data',
         return {
             Root            : $resource( WP_Data.API_URL, { _wp_json_nonce: WP_Data.WP_NONCE }),
 
-            //PostsSchema     : $resource( WP_Data.API_URL + '/posts/schema', { _wp_json_nonce: WP_Data.WP_NONCE }),
-
             Posts           : $resource( WP_Data.API_URL + '/posts/:id?posts_per_page=ppp', {id: '@id', ppp: '@ppp', _wp_json_nonce: WP_Data.WP_NONCE}),
             PostBySlug      : $resource( WP_Data.API_URL + '/posts?name=:slug', {id: '@id', _wp_json_nonce: WP_Data.WP_NONCE}),
 
@@ -15,14 +13,6 @@ ngPressApp.factory('apiFactory', ['$resource', 'WP_Data',
 
             UserMe          : $resource( WP_Data.API_URL + '/users/me', { _wp_json_nonce: WP_Data.WP_NONCE}),
             User            : $resource( WP_Data.API_URL + '/users/:id', {id: '@id', _wp_json_nonce: WP_Data.WP_NONCE})
-
-            /*var resource = $resource('/bug',{},{
-                post:{
-                    method:"POST",
-                    isArray:false,
-                    headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
-                },
-            });*/
         };
     }
 ]);

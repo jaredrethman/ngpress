@@ -142,6 +142,7 @@ ngPressApp.controller('CommentsController', ['$state', '$scope', 'userFactory', 
 
         $scope.$on('$stateChangeSuccess', function (e, toState, toParams) {
             apiHelperFactory.currentPostId( toParams.post_type, toParams.slug ).then(function (id) {
+
                 $scope.saveComment = function (form, e) {
                     apiFactory.Comments.save({ id: id.id }, $scope.commentData, function (response) {
                         console.log('SUCCESS: ' + response);

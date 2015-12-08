@@ -28,7 +28,7 @@ foreach($posts as $post){
 			"url" 			=> '/' . $post->post_name,
 			"post_type" 	=> $post->post_type,
 			"controller" 	=> "BlogController",
-			"templateUrl"	=> NGPRESS_THEME_URI . $page_template,
+			"templateUrl"	=> esc_url_raw( NGPRESS_THEME_URI . $page_template ),
 			"post_id" 		=> $post->ID
 		);
 		array_push(	$states, $state );
@@ -41,7 +41,7 @@ foreach($posts as $post){
 			"url" 			=> '/',
 			"post_type" 	=> $post->post_type,
 			"controller" 	=> "HomeController",
-			"templateUrl" 	=> NGPRESS_THEME_URI . $page_template,
+			"templateUrl" 	=> esc_url_raw( NGPRESS_THEME_URI . $page_template ),
 			"post_id" 		=> $post->ID
 		);
 		array_push(	$states, $state );
@@ -63,7 +63,7 @@ if($is_posts){
 		"url" 			=> '/' . $blog_name . '/:slug',
 		"post_type" 	=> 'post',
 		"controller" 	=> "PostController",
-		"templateUrl" 	=> NGPRESS_THEME_URI . 'partials/single-post.tpl.php'
+		"templateUrl" 	=> esc_url_raw( NGPRESS_THEME_URI . 'partials/single-post.tpl.php' )
 	);
 	array_push(	$states, $poststate );
 }
@@ -75,7 +75,7 @@ if($is_pages){
 		"url"			=> '/:slug',
 		"post_type" 	=> 'page',
 		"controller" 	=> "PageController",
-		"templateUrl" 	=> NGPRESS_THEME_URI . $page_template
+		"templateUrl" 	=> esc_url_raw( NGPRESS_THEME_URI . $page_template )
 	);
 	array_push(	$states, $state );
 }
@@ -86,7 +86,7 @@ if (isset($page404->ID)) {
 		"name" 			=> '404',
 		"url" 			=> '/404',
 		"controller"	=> "PagesController",
-		"templateUrl" 	=> NGPRESS_THEME_URI . 'partials/404.tpl.php',
+		"templateUrl" 	=> esc_url_raw( NGPRESS_THEME_URI . 'partials/404.tpl.php' ),
 		"post_id" 		=> $page404->ID
 	);
 	array_push(	$states, $poststate );

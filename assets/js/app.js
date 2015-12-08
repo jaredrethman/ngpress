@@ -10,21 +10,21 @@ var ngPressApp = angular.module( 'ngPressApp', [
 
 //Use a constant to hold WP localized data _inc/scripts.php
 var WP_Data = {
-    ROOT_URL        : configJS.rootUri,
-    THEME_URL       : configJS.themeUri,
-    API_URL         : configJS.wpAPIData.base,
-    WP_AJAX_URL     : configJS.wpAjaxUri,
-    WP_NONCE        : configJS.wpAPIData.nonce,
-    USER_ID         : configJS.wpAPIData.user_id
+    ROOT_URL        : configoo.rootUri,
+    THEME_URL       : configoo.themeUri,
+    API_URL         : configoo.root,
+    WP_AJAX_URL     : configoo.wpAjaxUri,
+    WP_NONCE        : configoo.nonce,
+    USER_ID         : configoo.user_id
 };
-
+console.log(WP_Data.THEME_URL + "/_inc/states.php");
 ngPressApp.constant( 'WP_Data', WP_Data );
 
 ngPressApp.config( ['$stateProvider', '$futureStateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'WP_Data',
     function( $sp, $futureStateProvider, $urlRouterProvider, $locationProvider, $httpProvider, WP_Data ) {
         'use strict';
 
-        //$httpProvider.defaults.headers.common = { 'X-WP-Nonce' : WP_Data.WP_NONCE };
+        $httpProvider.defaults.headers.common = { 'X-WP-Nonce' : WP_Data.WP_NONCE };
 
         //Future states allows us to generate routes dynamically using a JSON objected/file created in WP
         var initFutureStates = ['$http', '$q', '$timeout', function($http, $q, $timeout) {

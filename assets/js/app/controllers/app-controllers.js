@@ -7,6 +7,7 @@ ngPressApp.controller('ngPressController', ['$rootScope', '$state', 'apiFactory'
 
             var pt = toParams.post_type;
 
+            console.log(toParams);
             //Some sort of bodyClass();
             vm.bodyClass = pt + ' ' + toParams;
 

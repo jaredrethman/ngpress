@@ -1,18 +1,18 @@
 ngPressApp.factory('apiFactory', ['$resource', 'WP_Data',
     function( $resource, WP_Data ) {
         return {
-            Root            : $resource( WP_Data.API_URL, { _wp_json_nonce: WP_Data.WP_NONCE }),
+            Root            : $resource( WP_Data.API_URL, { }),
 
-            Posts           : $resource( WP_Data.API_URL + '/posts/:id?posts_per_page=ppp', {id: '@id', ppp: '@ppp', _wp_json_nonce: WP_Data.WP_NONCE}),
-            PostBySlug      : $resource( WP_Data.API_URL + '/posts?name=:slug', {id: '@id', _wp_json_nonce: WP_Data.WP_NONCE}),
+            Posts           : $resource( WP_Data.API_URL + 'posts/:id?posts_per_page=ppp', {id: '@id', ppp: '@ppp',}),
+            PostBySlug      : $resource( WP_Data.API_URL + 'posts?filter[name]=:slug', {id: '@id',}),
 
-            Pages           : $resource( WP_Data.API_URL + '/pages/:id', {id: '@id', _wp_json_nonce: WP_Data.WP_NONCE}),
-            PageBySlug      : $resource( WP_Data.API_URL + '/pages?name=:slug', {slug: '@slug', _wp_json_nonce: WP_Data.WP_NONCE}),
+            Pages           : $resource( WP_Data.API_URL + 'pages/:id', {id: '@id',}),
+            PageBySlug      : $resource( WP_Data.API_URL + 'pages?filter[name]=:slug', {id: '@id',}),
 
-            Comments        : $resource( WP_Data.API_URL + '/comments?post=:id', {id: '@id', _wp_json_nonce: WP_Data.WP_NONCE}),
+            Comments        : $resource( WP_Data.API_URL + 'comments?post=:id', {id: '@id',}),
 
-            UserMe          : $resource( WP_Data.API_URL + '/users/me', { _wp_json_nonce: WP_Data.WP_NONCE}),
-            User            : $resource( WP_Data.API_URL + '/users/:id', {id: '@id', _wp_json_nonce: WP_Data.WP_NONCE})
+            UserMe          : $resource( WP_Data.API_URL + 'users/me', {}),
+            User            : $resource( WP_Data.API_URL + 'users/:id', {id: '@id',})
         };
     }
 ]);

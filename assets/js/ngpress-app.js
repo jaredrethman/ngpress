@@ -10,21 +10,21 @@ var ngPressApp = angular.module( 'ngPressApp', [
 
 //Use a constant to hold WP localized data _inc/scripts.php
 var WP_Data = {
-    ROOT_URL        : configJS.rootUri,
-    THEME_URL       : configJS.themeUri,
-    API_URL         : configJS.wpAPIData.base,
-    WP_AJAX_URL     : configJS.wpAjaxUri,
-    WP_NONCE        : configJS.wpAPIData.nonce,
-    USER_ID         : configJS.wpAPIData.user_id
+    ROOT_URL        : configoo.rootUri,
+    THEME_URL       : configoo.themeUri,
+    API_URL         : configoo.root,
+    WP_AJAX_URL     : configoo.wpAjaxUri,
+    WP_NONCE        : configoo.nonce,
+    USER_ID         : configoo.user_id
 };
-
+console.log(WP_Data.THEME_URL + "/_inc/states.php");
 ngPressApp.constant( 'WP_Data', WP_Data );
 
 ngPressApp.config( ['$stateProvider', '$futureStateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'WP_Data',
     function( $sp, $futureStateProvider, $urlRouterProvider, $locationProvider, $httpProvider, WP_Data ) {
         'use strict';
 
-        //$httpProvider.defaults.headers.common = { 'X-WP-Nonce' : WP_Data.WP_NONCE };
+        $httpProvider.defaults.headers.common = { 'X-WP-Nonce' : WP_Data.WP_NONCE };
 
         //Future states allows us to generate routes dynamically using a JSON objected/file created in WP
         var initFutureStates = ['$http', '$q', '$timeout', function($http, $q, $timeout) {
@@ -61,7 +61,6 @@ ngPressApp.config( ['$stateProvider', '$futureStateProvider', '$urlRouterProvide
 ngPressApp.run( ['apiFactory',
     function( apiFactory ) {
         //console.log(apiFactory.Root.get());
-
     }
 ]);
 ngPressApp.controller('ngPressController', ['$rootScope', '$state', 'apiFactory',
@@ -73,6 +72,7 @@ ngPressApp.controller('ngPressController', ['$rootScope', '$state', 'apiFactory'
 
             var pt = toParams.post_type;
 
+            console.log(toParams);
             //Some sort of bodyClass();
             vm.bodyClass = pt + ' ' + toParams;
 
@@ -208,6 +208,7 @@ ngPressApp.controller('CommentsController', ['$state', '$scope', 'userFactory', 
 
         $scope.$on('$stateChangeSuccess', function (e, toState, toParams) {
             apiHelperFactory.currentPostId( toParams.post_type, toParams.slug ).then(function (id) {
+
                 $scope.saveComment = function (form, e) {
                     apiFactory.Comments.save({ id: id.id }, $scope.commentData, function (response) {
                         console.log('SUCCESS: ' + response);
@@ -249,30 +250,12 @@ var pagesModule = angular.module( 'ngPressApp.pagesModule', ['ui.router']);
 
 pagesModule.controller( 'PageController', ['$state', 'apiFactory', '$scope',
     function( $state, apiFactory, $scope ) {
-
-        /*apiFactory.PageBySlug.query({ slug: $state.params.slug }, function (post) {
-            console.log(post, $scope.$parent);
-            $scope.title = post[0].title.rendered;
-            $scope.content = post[0].content.rendered;
-        }, function(error){
-            connsole.log(error);
-        });*/
-
     }
 ]);
 var postModule = angular.module( 'ngPressApp.postModule', ['ui.router']);
 
 postModule.controller( 'PostController', ['apiFactory', '$state', '$scope',
     function( apiFactory, $state, $scope ) {
-
-        /*apiFactory.PostBySlug.query({slug: $state.params.slug}, function (post) {
-            console.log($state, post);
-            $scope.title = post[0].title.rendered;
-            $scope.content = post[0].content.rendered;
-        }, function(error){
-            connsole.log(error);
-        });*/
-
     }
 ]);
 ngPressApp.directive('theContent', ['$sce', function( $sce ){
@@ -374,28 +357,18 @@ ngPressApp.directive('postList', ['$sce', 'apiFactory' ,
 ngPressApp.factory('apiFactory', ['$resource', 'WP_Data',
     function( $resource, WP_Data ) {
         return {
-            Root            : $resource( WP_Data.API_URL, { _wp_json_nonce: WP_Data.WP_NONCE }),
+            Root            : $resource( WP_Data.API_URL, { }),
 
-            //PostsSchema     : $resource( WP_Data.API_URL + '/posts/schema', { _wp_json_nonce: WP_Data.WP_NONCE }),
+            Posts           : $resource( WP_Data.API_URL + 'posts/:id?posts_per_page=ppp', {id: '@id', ppp: '@ppp',}),
+            PostBySlug      : $resource( WP_Data.API_URL + 'posts?filter[name]=:slug', {id: '@id',}),
 
-            Posts           : $resource( WP_Data.API_URL + '/posts/:id?posts_per_page=ppp', {id: '@id', ppp: '@ppp', _wp_json_nonce: WP_Data.WP_NONCE}),
-            PostBySlug      : $resource( WP_Data.API_URL + '/posts?name=:slug', {id: '@id', _wp_json_nonce: WP_Data.WP_NONCE}),
+            Pages           : $resource( WP_Data.API_URL + 'pages/:id', {id: '@id',}),
+            PageBySlug      : $resource( WP_Data.API_URL + 'pages?filter[name]=:slug', {id: '@id',}),
 
-            Pages           : $resource( WP_Data.API_URL + '/pages/:id', {id: '@id', _wp_json_nonce: WP_Data.WP_NONCE}),
-            PageBySlug      : $resource( WP_Data.API_URL + '/pages?name=:slug', {slug: '@slug', _wp_json_nonce: WP_Data.WP_NONCE}),
+            Comments        : $resource( WP_Data.API_URL + 'comments?post=:id', {id: '@id',}),
 
-            Comments        : $resource( WP_Data.API_URL + '/comments?post=:id', {id: '@id', _wp_json_nonce: WP_Data.WP_NONCE}),
-
-            UserMe          : $resource( WP_Data.API_URL + '/users/me', { _wp_json_nonce: WP_Data.WP_NONCE}),
-            User            : $resource( WP_Data.API_URL + '/users/:id', {id: '@id', _wp_json_nonce: WP_Data.WP_NONCE})
-
-            /*var resource = $resource('/bug',{},{
-                post:{
-                    method:"POST",
-                    isArray:false,
-                    headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
-                },
-            });*/
+            UserMe          : $resource( WP_Data.API_URL + 'users/me', {}),
+            User            : $resource( WP_Data.API_URL + 'users/:id', {id: '@id',})
         };
     }
 ]);

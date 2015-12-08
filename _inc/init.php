@@ -147,11 +147,23 @@ if ( ! function_exists( 'ngpress_angular_template' ) ) :
 add_filter( 'template_include', 'ngpress_angular_template', 99 );
 endif;
 
+//MAINTAIN ANGULAR TEMPLATE INDEX.PHP
+if ( ! function_exists( 'ngpress_islocalhost()' ) ) :
+
+	function ngpress_islocalhost() {
+
+		return true;
+
+		return $template;
+	}
+
+endif;
+
 //BASE PATH
 if ( ! function_exists( 'ngpress_basepath' ) ) :
  
 	function ngpress_basepath() {
-		if(ngpress_islocalhost)
+		if(ngpress_islocalhost())
 			echo '/trmdigital_wp.com/';
 		else
 			echo '/';

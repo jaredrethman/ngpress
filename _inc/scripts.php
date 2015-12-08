@@ -1,5 +1,4 @@
 <?php
-
 if ( ! function_exists( 'ngpress_scripts' ) ) :
 
 	function ngpress_scripts() {
@@ -16,8 +15,8 @@ if ( ! function_exists( 'ngpress_scripts' ) ) :
 			//return;
 			
 		// Leave if not specifically requested from the theme or a plugin
-		if ( ! $config = get_theme_support( $theme_td . '-app' ) )
-			return;
+		if ( ! $config = get_theme_support( 'wp-api' ) )
+			//return;
 		
 		// Array of dependencies
 		$script_dependencies = null;
@@ -33,9 +32,9 @@ if ( ! function_exists( 'ngpress_scripts' ) ) :
 			$script_data = $config[ 1 ];
 		
 		// Data for localization
-		$script_data[ 'base' ] = rest_url( '/wp/v2' );
+		//$script_data[ 'base' ] = rest_get_url_prefix() . '/wp/v2';
 		
-		$script_data[ 'nonce' ] = wp_create_nonce( 'wp_api' );
+		//$script_data[ 'nonce' ] = wp_create_nonce( 'wp_rest' );
 		
 		// Provide user id if logged in
 		if ( is_user_logged_in() )
@@ -44,7 +43,7 @@ if ( ! function_exists( 'ngpress_scripts' ) ) :
 			$script_data[ 'user_id' ] = 0;	
 	
 		//DEV vs DIST
-		if( ngpress_islocalhost ){
+		if( ngpress_islocalhost() ){
 	
 			//
 			// JS
@@ -55,8 +54,8 @@ if ( ! function_exists( 'ngpress_scripts' ) ) :
 				//Grunt task concat:libs
 				wp_enqueue_script( $theme_td . '-libs', get_template_directory_uri() . '/assets/js/' . $theme_td . '-libs.js', array(), $theme_ver, true );
 				//Grunt task concat:app
-				wp_enqueue_script( $theme_td . '-app', 
-					get_template_directory_uri() . '/assets/js/' . $theme_td . '-app.js', 
+				wp_enqueue_script( 'wp-api',
+					get_template_directory_uri() . '/assets/js/' . $theme_td . '-app.js',
 					array(), 
 					$theme_ver, true 
 				);
@@ -76,7 +75,7 @@ if ( ! function_exists( 'ngpress_scripts' ) ) :
 			//
 			if(!is_admin()){
 				//Grunt task concat:dist + uglify
-				wp_enqueue_script( $theme_td . '-app', 
+				wp_enqueue_script( 'wp-api',
 					get_template_directory_uri() . '/dist/' . $theme_td . '.min.js', 
 					array(), 
 					$theme_ver, true 
@@ -95,17 +94,29 @@ if ( ! function_exists( 'ngpress_scripts' ) ) :
 			add_action( 'wp_ajax_ngpressajaxlogout', 'ngpress_ajax_logout' );
 		}else{
 			//Vars to use in Angular
-			wp_localize_script( $theme_td . '-app', 'configJS',
+			//wp_localize_script( 'wp-api', 'WP_API_Settings', array( 'root' => esc_url_raw( rest_url() ), 'nonce' => wp_create_nonce( 'wp_rest' ) ) );
+			wp_localize_script('wp-api', 'WP_API_Settings',
 				array(
-					'wpAjaxUri' => admin_url( 'admin-ajax.php' ), //Need for logins + Registrations
+					'wpAjaxUri' => esc_url_raw( admin_url() . 'admin-ajax.php' ), //Need for logins + Registrations
+					'root' 		=> rest_url( ) . 'wp/v2/',
 					'rootUri'   => get_bloginfo( 'wpurl' ),
 					'themeUri'  => get_template_directory_uri(),
-					'wpAPIData' => $script_data
+					'nonce'		=> wp_create_nonce( 'wp_rest' ),
+					'user_id'	=> is_user_logged_in() ? get_current_user_id() : 0,
 				)
-			);	
+			);
+			wp_localize_script('wp-api', 'configoo',
+				array(
+					'wpAjaxUri' => esc_url_raw( admin_url() . 'admin-ajax.php' ), //Need for logins + Registrations
+					'root' 		=> rest_url() . 'wp/v2/', //Need for logins + Registrations
+					'rootUri'   => get_bloginfo( 'wpurl' ),
+					'themeUri'  => get_template_directory_uri(),
+					'nonce'		=> wp_create_nonce( 'wp_rest' ),
+					'user_id'	=> is_user_logged_in() ? get_current_user_id() : 0,
+				)
+			);
 		}
 	}
 	add_action( 'init', 'ngpress_scripts' );
-
 endif;
 

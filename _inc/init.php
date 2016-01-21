@@ -4,9 +4,9 @@
  */
 
 //CONSTANTS
-define( NGPRESS_ROOT_URI	, $_SERVER['SCRIPT_FILENAME'] );
-define( NGPRESS_THEME_URI	, trailingslashit( get_template_directory_uri() ) );
-define( NGPRESS_PREFIX		, wp_get_theme()->get('TextDomain') );
+define( 'NGPRESS_ROOT_URI'	, $_SERVER['SCRIPT_FILENAME'] );
+define( 'NGPRESS_THEME_URI'	, trailingslashit( get_template_directory_uri() ) );
+define( 'NGPRESS_PREFIX'	, wp_get_theme()->get('TextDomain') );
 
 //THEME SETUP
 if ( ! function_exists( 'ngpress_init' ) ) :
